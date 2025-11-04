@@ -8,9 +8,15 @@ import 'package:weather/src/presentation/blocs/weather_search_event.dart';
 import 'package:weather/src/presentation/blocs/weather_search_state.dart';
 
 @RoutePage()
-class WeatherScreen extends StatelessWidget {
+class WeatherScreen extends StatefulWidget {
   const WeatherScreen({super.key});
 
+  @override
+  State<WeatherScreen> createState() => _WeatherScreenState();
+}
+
+class _WeatherScreenState extends State<WeatherScreen> {
+  final TextEditingController _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -28,6 +34,7 @@ class WeatherScreen extends StatelessWidget {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     SearchField(
+                      controller: _controller,
                       suggestions: state.citiesStatus.maybeWhen(
                         success: (locations) {
                           return locations
@@ -45,6 +52,7 @@ class WeatherScreen extends StatelessWidget {
                         state.citiesStatus.maybeWhen(
                           success: (locations) {
                             final chosenLocation = locations[index];
+                            _controller.text = chosenLocation.name;
                             context.read<WeatherSearchBloc>().add(
                               WeatherSearchLocationTapped(
                                 location: chosenLocation,
@@ -56,13 +64,18 @@ class WeatherScreen extends StatelessWidget {
                       },
                     ),
                     Spacer(),
-                    state.weatherStatus.maybeWhen(success: (forecast) {
-                      return Center(child: HeadlineDisplay(text: '${forecast.main.temp.toString()}°C',));
-                    },
-                    loading: () => CircularProgressIndicator(),
-                    failure: (reason) => Text(reason),
-                    orElse: () => SizedBox.shrink(),)
-                   
+                    state.weatherStatus.maybeWhen(
+                      success: (forecast) {
+                        return Center(
+                          child: HeadlineDisplay(
+                            text: '${forecast.main.temp.toString()}°C',
+                          ),
+                        );
+                      },
+                      loading: () => CircularProgressIndicator(),
+                      failure: (reason) => Text(reason),
+                      orElse: () => SizedBox.shrink(),
+                    ),
                   ],
                 ),
               ),

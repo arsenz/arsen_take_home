@@ -7,7 +7,9 @@ class SearchField extends StatelessWidget {
   final List? suggestions;
   final void Function(int index)?
   onSuggestionTapped; // Generic callback that lets the parent widget know which suggestion was tapped
+  final TextEditingController? controller;
   const SearchField({
+    this.controller,
     this.onChanged,
     this.suggestions,
     this.onSuggestionTapped,
@@ -26,7 +28,7 @@ class SearchField extends StatelessWidget {
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: TextField(onChanged: onChanged),
+            child: TextField(onChanged: onChanged, controller: controller,),
           ),
         ),
         (suggestions != null && onSuggestionTapped != null)

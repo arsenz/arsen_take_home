@@ -62,6 +62,8 @@ class WeatherSearchBloc extends Bloc<WeatherSearchEvent, WeatherSearchState> {
     WeatherSearchLocationTapped event,
     Emitter<WeatherSearchState> emit,
   ) async {
+    // reset locations
+    emit(state.copyWith(citiesStatus: CitiesStatus.idle()));
     emit(state.copyWith(weatherStatus: WeatherStatus.loading()));
     final geoCode = event.location.geoCode;
     if (geoCode == null) {
@@ -84,7 +86,9 @@ class WeatherSearchBloc extends Bloc<WeatherSearchEvent, WeatherSearchState> {
     }
     emit(
       state.copyWith(
-        weatherStatus: WeatherStatus.failure(result.failureOrDefault.message ?? 'UnknownError'),
+        weatherStatus: WeatherStatus.failure(
+          result.failureOrDefault.message ?? 'UnknownError',
+        ),
       ),
     );
   }
