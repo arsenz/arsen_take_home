@@ -1,0 +1,11 @@
+name: core
+environment:
+  sdk: ^3.8.0
+resolution: workspace
+dependencies:
+  auto_route: ^10.2.0
+  injectable: ^2.5.2
+dev_dependencies:
+  auto_route_generator: ^10.2.5
+  build_runner: ^2.10.1
+  injectable_generator: ^2.9.0

@@ -1,0 +1,7 @@
+name: design_system
+environment:
+  sdk: ^3.8.0
+resolution: workspace
+dependencies: 
+  flutter:
+    sdk: flutter
