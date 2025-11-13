@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:core/core.dart';
 import 'package:injectable/injectable.dart';
 import 'package:stream_transform/stream_transform.dart';
@@ -44,11 +42,9 @@ class WeatherSearchBloc extends Bloc<WeatherSearchEvent, WeatherSearchState> {
     WeatherSearchLocationTyped event,
     Emitter<WeatherSearchState> emit,
   ) async {
-    print('myprint 2');
     emit(state.copyWith(citiesStatus: CitiesStatus.loading()));
     final result = await _getCitiesUseCase.getCities(searchQuery: event.query);
     final value = result.value;
-    print('myprint 3: $value');
     if (value != null) {
       emit(
         state.copyWith(citiesStatus: CitiesStatus.success(locations: value)),

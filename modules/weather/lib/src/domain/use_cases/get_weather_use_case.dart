@@ -1,9 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:weather/src/data/dtos/location_response.dart';
-import 'package:weather/src/data/dtos/weather_response.dart';
-import 'package:weather/src/domain/behaviors/get_cities_behavior.dart';
 import 'package:weather/src/domain/behaviors/get_weather_behavior.dart';
-import 'package:weather/src/domain/models/location.dart';
 import 'package:core/core.dart';
 import 'package:weather/src/domain/models/weather.dart';
 

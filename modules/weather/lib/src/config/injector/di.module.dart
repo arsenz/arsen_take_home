@@ -6,11 +6,14 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i687;
 
+import 'package:dio/dio.dart' as _i361;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:weather/src/config/injector/weather_injector_module.dart'
     as _i191;
 import 'package:weather/src/data/services/amadeus_service.dart' as _i528;
 import 'package:weather/src/data/services/weather_service.dart' as _i574;
+import 'package:weather/src/data/sources/amadeus_api.dart' as _i429;
+import 'package:weather/src/data/sources/weather_api.dart' as _i545;
 import 'package:weather/src/domain/behaviors/get_cities_behavior.dart' as _i959;
 import 'package:weather/src/domain/behaviors/get_weather_behavior.dart'
     as _i766;
@@ -25,8 +28,14 @@ class WeatherPackageModule extends _i526.MicroPackageModule {
   @override
   _i687.FutureOr<void> init(_i526.GetItHelper gh) {
     final weatherInjectorModule = _$WeatherInjectorModule();
-    gh.singleton<_i528.AmadeusService>(() => _i528.AmadeusService());
-    gh.singleton<_i574.WeatherService>(() => _i574.WeatherService());
+    gh.factory<_i429.AmadeusApi>(() => weatherInjectorModule
+        .amadeusApi(gh<_i361.Dio>(instanceName: 'protected-dio')));
+    gh.factory<_i545.WeatherApi>(() => weatherInjectorModule
+        .weatherApi(gh<_i361.Dio>(instanceName: 'protected-dio')));
+    gh.singleton<_i574.WeatherService>(
+        () => _i574.WeatherService(gh<_i545.WeatherApi>()));
+    gh.singleton<_i528.AmadeusService>(
+        () => _i528.AmadeusService(gh<_i429.AmadeusApi>()));
     gh.factory<_i766.GetWeatherBehavior>(() =>
         weatherInjectorModule.getWeatherBehavior(gh<_i574.WeatherService>()));
     gh.factory<_i959.GetCitiesBehavior>(() =>
