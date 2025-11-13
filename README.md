@@ -1,10 +1,9 @@
 # arsen_take_home
 # arsen_take_home
 
-This project architecture trivializes authentication and `dio_client` instance management (for the lack of time).  
-Ideally, authorization should be maintained by a global Bloc provided above the `MaterialApp`, and an interceptor should refresh tokens on `401`s to update the header bearer.
 
-Additionally, API keys are naively stored and retrieved from `.env` and are supplied in HTTP methods, which is a huge anti-pattern, but for the purposes of this project was not focused on.
+
+API keys are naively stored and retrieved from `.env` and are supplied in HTTP methods, which is a huge anti-pattern, but for the purposes of this project was not focused on.
 
 ---
 
