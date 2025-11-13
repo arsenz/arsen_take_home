@@ -36,40 +36,44 @@ class _WeatherScreenState extends State<WeatherScreen> {
                   children: [
                     BlocBuilder<AuthCubit, AuthState>(
                       builder: (context, authState) {
-return authState.authStatus.maybeWhen(
-  success: () =>  SearchField(
-                          controller: _controller,
-                          suggestions: state.citiesStatus.maybeWhen(
-                            success: (locations) {
-                              return locations
-                                  .map((location) => location.name)
-                                  .toList();
-                            },
-                            orElse: () => [],
-                          ),
-                          onChanged: (searchTerm) {
-                            context.read<WeatherSearchBloc>().add(
-                              WeatherSearchLocationTyped(query: searchTerm),
-                            );
-                          },
-                          onSuggestionTapped: (index) {
-                            state.citiesStatus.maybeWhen(
+                        return authState.authStatus.maybeWhen(
+                          success: () => SearchField(
+                            controller: _controller,
+                            suggestions: state.citiesStatus.maybeWhen(
                               success: (locations) {
-                                final chosenLocation = locations[index];
-                                _controller.text = chosenLocation.name;
-                                context.read<WeatherSearchBloc>().add(
-                                  WeatherSearchLocationTapped(
-                                    location: chosenLocation,
-                                  ),
-                                );
+                                return locations
+                                    .map((location) => location.name)
+                                    .toList();
                               },
-                              orElse: () {},
-                            );
-                          },
-                        ),
-                        failure: () => Button(text: 'auth failed, tap to retry', onTap: () => context.read<AuthCubit>().authenticate(),),
-  orElse: ()=> SizedBox());
-                       
+                              orElse: () => [],
+                            ),
+                            onChanged: (searchTerm) {
+                              context.read<WeatherSearchBloc>().add(
+                                WeatherSearchLocationTyped(query: searchTerm),
+                              );
+                            },
+                            onSuggestionTapped: (index) {
+                              state.citiesStatus.maybeWhen(
+                                success: (locations) {
+                                  final chosenLocation = locations[index];
+                                  _controller.text = chosenLocation.name;
+                                  context.read<WeatherSearchBloc>().add(
+                                    WeatherSearchLocationTapped(
+                                      location: chosenLocation,
+                                    ),
+                                  );
+                                },
+                                orElse: () {},
+                              );
+                            },
+                          ),
+                          failure: () => Button(
+                            text: 'auth failed, tap to retry',
+                            onTap: () =>
+                                context.read<AuthCubit>().authenticate(),
+                          ),
+                          orElse: () => SizedBox(),
+                        );
                       },
                     ),
                     Spacer(),
